@@ -1,0 +1,23 @@
+.checkbox-wrapper {
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  cursor: default;
+}
+
+.checkbox-indicator {
+  height: 14px;
+  width: 14px;
+
+  border-radius: 7px;
+  
+  border: 2px solid #004D61;
+
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.checkbox-indicator[data-checked="true"] {
+  background-color: #004D61;
+}
