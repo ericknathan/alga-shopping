@@ -19,8 +19,6 @@ export function App() {
     dispatch(toggleProduct(id));
   }
 
-  console.log("Render app");
-
   return <div className="app-wrapper">
     <div className="app-content">
       <AppHeader />
