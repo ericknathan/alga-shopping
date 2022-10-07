@@ -1,15 +1,19 @@
+import { useSelector } from 'react-redux';
+import { selectAllProducts, selectSelectedProducts } from '../../store/Products/Products.selectors';
+
 import { Checkbox } from '../Checkbox';
-import { Product } from '../../App';
 
 import './styles.css';
 
 interface ShoppingListProps {
   title: string;
-  products: Product[];
+  displayOnlySelected?: boolean;
   onToggle: (id: string, checked: boolean, name: string) => void;
 }
 
-export function ShoppingList ({ title, products, onToggle }: ShoppingListProps) {
+export function ShoppingList ({ title, displayOnlySelected = false, onToggle }: ShoppingListProps) {
+  const products = useSelector(displayOnlySelected ? selectSelectedProducts : selectAllProducts);
+
   return <div>
     <h2 className="title">
       { title }:

@@ -1,50 +1,25 @@
-import { useState, useEffect } from 'react';
-import { LineChart, AppContainer, AppHeader, ShoppingList } from './components';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleProduct } from './store/Products/Products.actions';
+import { selectSelectedProductsTotalPrice, selectAllProducts, selectSelectedProducts } from './store/Products/Products.selectors';
 
-import productsMock from './mocks/products.json';
 import extractPercentage from './utils/extractPercentage';
+import { LineChart, AppContainer, AppHeader, ShoppingList } from './components';
 
 import './App.css';
 
-export interface Product {
-  id: string;
-  type: string;
-  name: string;
-  checked: boolean;
-  price: number;
-  tags: string[];
-}
-
 export function App() {
-  const colors = ['#62CBC6', '#00ABAD', '#00858C', '#006073', '#004D61']
+  const dispatch = useDispatch();
+  const colors = ['#62CBC6', '#00ABAD', '#00858C', '#006073', '#004D61'];
 
-  const [products, setProducts] = useState<Product[]>(productsMock.products)
-  const [selectedProducts, setSelectedProducts] = useState<Product[]>([])
-  const [totalPrice, setTotalPrice] = useState(0)
+  const products = useSelector(selectAllProducts);
+  const selectedProducts = useSelector(selectSelectedProducts);
+  const totalPrice = useSelector(selectSelectedProductsTotalPrice);
 
-  useEffect(() => {
-    const newSelectedProducts = products
-      .filter(product => product.checked)
-    
-    setSelectedProducts(newSelectedProducts)
-  }, [products])
-
-  useEffect(() => {
-    const total = selectedProducts
-      .map(product => product.price)
-      .reduce((a, b) => a + b, 0)
-
-    setTotalPrice(total)
-  }, [selectedProducts])
-
-  function handleToggle (id: string, checked: boolean, name: string) {
-    const newProducts = products.map(product =>
-        product.id === id
-          ? { ...product, checked: !product.checked }
-          : product
-    )
-    setProducts(newProducts)
+  function handleToggle (id: string) {
+    dispatch(toggleProduct(id));
   }
+
+  console.log("Render app");
 
   return <div className="app-wrapper">
     <div className="app-content">
@@ -53,17 +28,16 @@ export function App() {
         left={
           <ShoppingList
             title="Produtos disponíveis"
-            products={products}
             onToggle={handleToggle}
           />}
         middle={
           <ShoppingList
             title="Sua lista de compras"
-            products={selectedProducts}
+            displayOnlySelected
             onToggle={handleToggle}
           />}
         right={<div>
-          estatisticas
+          Estatísticas
 
           <LineChart
             color={colors[0]}
